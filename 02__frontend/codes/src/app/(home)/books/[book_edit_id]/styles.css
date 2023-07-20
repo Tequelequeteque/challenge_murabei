@@ -1,0 +1,23 @@
+form {
+    padding: 16px 0px;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    flex-direction: row;
+}
+
+
+.column {
+    justify-content: center;
+    align-items: center;
+    flex-basis: auto; 
+    max-width: auto;
+}
+
+.column-full {
+    display: flex;
+    justify-content: center;
+    flex-basis: 100%; 
+    max-width: 100%;
+}

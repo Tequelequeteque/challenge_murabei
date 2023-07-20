@@ -1,2 +1,3 @@
-source version
-docker build -t desafio-murabei-backend:latest .
+cp -r ../00__database .
+docker compose up -d --force-recreate --build
+rm -rf 00__database

@@ -15,11 +15,15 @@ class BookController(Resource):
         authorization = request.headers.get('Authorization')
         page = request.args.get('page', 1, type=int)
         limit = request.args.get('limit', 10, type=int)
+        book_id = request.args.get('id', None, type=int)
         if (self.auth_services.validate_token.execute(authorization)):
-            return self.book_services.list_all_book.execute(
-                page=1 if page < 1 else page,
-                limit=10 if limit < 1 else limit
-            )
+            if (book_id):
+                return self.book_services.get_book.execute(book_id)
+            else:
+                return self.book_services.list_all_book.execute(
+                    page=1 if page < 1 else page,
+                    limit=10 if limit < 1 else limit
+                )
         else:
             return {'message': 'Invalid token'}, 401
 

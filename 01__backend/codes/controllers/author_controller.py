@@ -15,10 +15,12 @@ class AuthorController(Resource):
         authorization = request.headers.get('Authorization')
         page = request.args.get('page', 1, type=int)
         limit = request.args.get('limit', 10, type=int)
+        title = request.args.get('title', '', type=str)
         if (self.auth_services.validate_token.execute(authorization)):
             return self.author_services.list_all_author.execute(
                 page=1 if page < 1 else page,
-                limit=10 if limit < 10 else limit
+                limit=10 if limit < 10 else limit,
+                title=title
             ), 200
         else:
             return {'message': 'Invalid token'}, 401

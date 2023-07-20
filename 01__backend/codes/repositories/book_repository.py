@@ -19,15 +19,27 @@ class BookRepository:
 
     def save(self, book: Book) -> None:
         """Save a book."""
-        self.db.session.add(book)
-        self.db.session.commit()
+        try:
+            self.db.session.add(book)
+            self.db.session.commit()
+        except Exception as error:
+            self.db.session.rollback()
+            raise error
 
     def update(self, book: Book) -> None:
         """Update a book."""
-        self.db.session.merge(book)
-        self.db.session.commit()
+        try:
+            self.db.session.merge(book)
+            self.db.session.commit()
+        except Exception as error:
+            self.db.session.rollback()
+            raise error
 
     def delete(self, book: Book) -> None:
         """Delete a book."""
-        self.db.session.delete(book)
-        self.db.session.commit()
+        try:
+            self.db.session.delete(book)
+            self.db.session.commit()
+        except Exception as error:
+            self.db.session.rollback()
+            raise error

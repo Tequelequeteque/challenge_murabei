@@ -1,21 +1,14 @@
-FROM python:3.8-slim-bullseye
+FROM python:alpine
 
-############################################
-# Instalar as coisas que forem necessárias #
-############################################
+ENV DOCKERIZE_VERSION v0.7.0
 
-# Linux Packages
-RUN apt-get update
-RUN apt-get install -y postgresql-client
-RUN apt-get install -y curl
+RUN apk update --no-cache \
+    && apk add --no-cache wget openssl \
+    && wget -O - https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz | tar xzf - -C /usr/local/bin \
+    && apk del wget
 
-# Packages install
-COPY requirements/requirements.txt ./
-RUN pip3 install --upgrade pip
-RUN pip3 install --no-cache-dir -r /requirements.txt
-
-# Coping files
-COPY codes /django
-WORKDIR /django/
-
-CMD ["bash", "/django/start_server.sh"]
+WORKDIR /server
+COPY 00__database ../00__database
+COPY . .
+RUN pip install -r requirements/requirements.txt
+CMD dockerize -wait tcp://${DB_HOST}:${DB_PORT} -timeout 30s python codes/main.py

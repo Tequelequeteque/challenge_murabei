@@ -5,6 +5,7 @@ cffi==1.15.1
 click==8.1.5
 cryptography==41.0.2
 Flask==2.3.2
+Flask-Cors==4.0.0
 Flask-RESTful==0.3.10
 greenlet==2.0.2
 itsdangerous==2.1.2

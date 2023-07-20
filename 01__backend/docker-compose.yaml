@@ -1,5 +1,9 @@
 version: '3.8'
 
+networks:
+  private:
+    name: private
+
 services:
   db:
     container_name: db
@@ -12,3 +16,18 @@ services:
       - POSTGRES_DB=${DB_NAME}
     ports:
       - '${DB_PORT}:5432'
+    networks:
+      - private
+    
+  server:
+    container_name: server
+    image: server
+    build: .
+    restart: always
+    env_file: .env
+    ports:
+      - '${APP_PORT}:${APP_PORT}'
+    depends_on:
+      - db
+    networks:
+      - private

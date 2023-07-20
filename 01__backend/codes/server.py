@@ -2,7 +2,9 @@ from config import Envs
 from controllers import (AuthController, AuthorController, BookController,
                          SubjectController)
 from flask import Flask
+from flask_cors import CORS
 from flask_restful import Api
+from repositories import Repositories
 from services import Services
 
 
@@ -11,6 +13,7 @@ class Server:
 
     def __init__(self, name: str, envs: Envs, services: Services):
         self.app = Flask(name)
+        CORS(self.app)
         self.api = Api(self.app)
         self.envs = envs
         self.services = services
@@ -49,7 +52,7 @@ class Server:
 
     def run(self) -> None:
         """Run the server."""
-        self.app.run(debug=True, port=self.envs.APP_PORT)
+        self.app.run(debug=True, port=self.envs.APP_PORT, host='0.0.0.0')
 
     @staticmethod
     def create(name: str, envs: Envs,  services: Services) -> 'Server':
@@ -58,5 +61,7 @@ class Server:
 
     def handle_exception(self, error: Exception):
         """Handle exception."""
-        print(error)
-        return {"message": "Internal server error", }, 500
+        return {
+            "message": "Internal server error",
+            "error": str(error)
+        }, 500
